@@ -1,0 +1,21 @@
+FROM php:7.3.27-apache
+
+RUN apt-get update \
+  && apt-get install -y \
+  gcc \
+  make \
+  vim \
+  openssh-client \
+  libicu-dev \
+  libzip-dev \
+  zlib1g-dev \
+  libpng-dev \
+  libmcrypt-dev \
+  libjpeg62-turbo-dev \
+  libfreetype6-dev \
+  && docker-php-ext-install pdo_mysql mysqli intl \
+  && docker-php-ext-install gd \
+  && a2enmod rewrite \
+  && a2enmod include \
+  && a2enmod cgi \
+  && a2enmod headers 

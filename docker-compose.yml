@@ -1,0 +1,30 @@
+version: '3.7'
+services:
+    mysql:
+        image: mysql:5.7.33
+        container_name: dev-env-mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: localhost
+            MYSQL_USER: docker
+            MYSQL_PASSWORD: dev_env
+            TZ: 'Asia/Tokyo'
+        ports:
+            - 3306:3306
+        volumes:
+            - ./db/init:/docker-entrypoint-initdb.d
+            - ./db/data:/var/lib/mysql
+    web:
+        image: php:7.3.27-apache
+        container_name: dev-env-web
+        build: 
+            context: ./apache
+            dockerfile: DockerFile
+        ports:
+            - 80:80
+        volumes:
+            - ./htdocs:/var/www/html
+            - ./apache/php.ini:/usr/local/etc/php/php.ini
+            - ./apache/conf/apache2.conf:/etc/apache2/apache2.conf
+        depends_on:
+            - mysql
